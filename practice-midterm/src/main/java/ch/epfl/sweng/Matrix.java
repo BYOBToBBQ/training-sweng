@@ -18,39 +18,86 @@ package ch.epfl.sweng;
  */
 public final class Matrix {
 
+	private int width=0;
+	private int height=0;
+	private double[][] coefficients;
+
 	public Matrix(int height, int width) {
-		// TODO
+
+		double [][]coefficients= new double[width][height];
+
+		for(int i=0; i<height; i++){
+			for(int j=0; j<width; j++){
+				coefficients[i][j]=0;
+			}
+		}
+
+		this.width=width;
+		this.height=height;
+		this.coefficients=coefficients;
 	}
 
 	public Matrix(double[][] elements) {
-		// TODO
+
+		this.width=elements[0].length;
+		this.height=elements.length;
+		this.coefficients=elements.clone();
 	}
 
 	public int getHeight() {
-		// TODO
-		return 0;
+
+		return height;
 	}
 
 	public int getWidth() {
-		// TODO
-		return 0;
+
+		return width;
 	}
 
 	public double getElement(int height, int width) {
-		// TODO
-		return 0;
+
+		return coefficients[height][width];
 	}
 
 	public void setElement(int height, int width, double value) {
-		// TODO
+
+		coefficients[height][width]=value;
 	}
 
 	public void normalizeColumns() {
-		// TODO
+		for(int i=0; i<width;i++){
+			scaleColumnBy(width,getColumnNorm(width));
+		}
+	}
+
+	private double getColumnNorm(int columnIndex){
+
+		Vector v = new Vector(height);
+
+		for(int i=0; i < v.dimension(); i++){
+			v.setElement(i,coefficients[i][columnIndex]);
+		}
+
+		return v.norm();
+	}
+
+	private void scaleColumnBy(int columnIndex, double parameter){
+
+		for(int i=0; i<height;i++){
+			setElement(i,columnIndex,getElement(i,columnIndex)*parameter);
+		}
 	}
 
 	public Vector multiply(Vector vector) {
-		// TODO
-		return null;
+		Vector result=new Vector(height);
+
+		for(int i=0; i<height; i++){
+			double coeff=0;
+			for(int j=0; j<width; j++){
+				coeff+=getElement(i,j)*vector.getElement(width);
+			}
+			result.setElement(i,coeff);
+		}
+		return result;
 	}
 }
